@@ -60,10 +60,6 @@ async def initialize(checkpointer):
    console.print(f"[green]✓ Ready[/green]\n")
    return llm, embedder, index, agent, session_id
 
-
-
-
-
 async def _run_async():
    logger.info("Starting Claude code")
    console.print("\n[bold blue] Claude code[/bold blue] — RAG-powered code assistant")
@@ -84,7 +80,7 @@ async def _run_async():
               question = user_input.removeprefix("/ask ").strip()
               logger.info(f"Ask command received: {question}")
               console.print(f"[dim]Searching for: {question}...[/dim]")
-              response = await handle_query(question, session_id)
+              response = await handle_query(agent, question, session_id)
               console.print(response)
           elif user_input == "/new_session":
               session_id = new_session()

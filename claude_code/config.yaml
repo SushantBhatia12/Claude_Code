@@ -3,7 +3,7 @@ embeddings:
     model: text-embedding-3-small
 
 chromadb:
-    persist_dir: .chromadb/
+    persist_dir: .claude_code/chromadb/
     collection_name: codebase
 
 elasticsearch:
@@ -18,7 +18,7 @@ vector_store:
     provider: qdrant
 
 qdrant:
-    collection_name: codebase1
+    collection_name: codebase3
 
 rag:
  mode: hybrid           # semantic | hybrid
@@ -28,6 +28,8 @@ vector_store:
  retrieval_mode: hybrid  # dense | sparse | hybrid
 
 memory:
- db_path: .memory/memory.db
+ db_path: .claude_code/memory/memory.db
  summarize_at_tokens: 4000
  keep_last_messages: 20
+skills:
+ skills_dir: .claude_code/skills

@@ -10,6 +10,8 @@ def retrieve(query: str, k: int = 5) -> list[dict]:
   Embed the query and find the k most similar chunks in ChromaDB.
   Returns a list of results with content and metadata.
   """
+  print(f"path for chroma client is  {config["chromadb"]["persist_dir"]}")
+  print(f"path for collection is {config["chromadb"]["collection_name"]} ")
   chroma_client = chromadb.PersistentClient(path=config["chromadb"]["persist_dir"])
   collection = chroma_client.get_or_create_collection(name=config["chromadb"]["collection_name"])
 
@@ -27,12 +29,15 @@ def retrieve(query: str, k: int = 5) -> list[dict]:
       n_results=k,
       include=["documents", "metadatas", "distances"]
   )
+  print(f"the result for the code :{results["documents"][0]}")
+
   chunks = []
   for doc, meta, dist in zip(
       results["documents"][0],
       results["metadatas"][0],
       results["distances"][0]
-  ):
+  ):     
+      
       chunks.append({
           "content": doc,
           "source": meta["source"],

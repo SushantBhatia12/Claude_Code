@@ -15,6 +15,7 @@ from claude_code.tools.filesystem_tools import (
     file_exists,
 )
 from claude_code.mcp.ClaudeCode__mcp_client import get_claudecode_mcp_tools
+from claude_code.skills.skill_tools import load_skill, build_skills_prompt
 
 logger = get_logger(__name__)
 SYSTEM_PROMPT = """You are a senior software engineer with deep knowledge of the codebase.
@@ -25,23 +26,25 @@ If you cannot find the answer in the codebase, say so explicitly."""
 async def build_agent(checkpointer):
   """Create and return a LangChain agent."""
   llm = get_llm()
+  skills_prompt = build_skills_prompt()
+  full_prompt = SYSTEM_PROMPT
+  if skills_prompt:
+    full_prompt = SYSTEM_PROMPT+"\n\n"+ skills_prompt
   mcp_tools = await get_claudecode_mcp_tools()
   tools = [search_codebase,
+           load_skill,
         run_command,
         run_in_directory,
-        read_file,
-        write_file,
-        append_file,
-        delete_file,
-        list_directory,
-        file_exists,
-        *mcp_tools] 
+        *mcp_tools,
+0
+       
+        ] 
   middleware = get_summarization_middleware()
   logger.info("Creating agent")
   return create_agent(
       llm,
       tools=tools,
-      system_prompt=SYSTEM_PROMPT,
+      system_prompt=full_prompt,
       checkpointer=checkpointer,
       middleware=[middleware]
 
