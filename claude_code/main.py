@@ -16,6 +16,8 @@ from claude_code.llm.factory import get_llm, get_embedder
 from claude_code.memory.short_term import get_checkpointer_db_path
 from claude_code.agents.orchestrator import handle_query
 from claude_code.memory.session import get_current_session, new_session, switch_session
+from claude_code.tasks.orchestrator import handle_plan_command
+from claude_code.tasks.status import show_task_status
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 console = Console()
@@ -91,6 +93,12 @@ async def _run_async():
              console.print(f"[green]Switched to session: {session_id}[/green]")
           elif user_input == "/session":
               console.print(f"[dim]Current session: {session_id}[/dim]")
+          elif user_input.startswith("/plan "):
+               goal = user_input.removeprefix("/plan ").strip()
+               logger.info(f"Plan command received: {goal}")
+               await handle_plan_command(goal)
+          elif user_input == "/task_status":
+               show_task_status()    
           elif user_input == "/show_index":
              logger.info("Showing index")
              get_index_inspector()(index)

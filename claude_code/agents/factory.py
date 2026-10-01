@@ -36,7 +36,6 @@ async def build_agent(checkpointer):
         run_command,
         run_in_directory,
         *mcp_tools,
-0
        
         ] 
   middleware = get_summarization_middleware()
